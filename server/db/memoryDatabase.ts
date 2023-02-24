@@ -32,4 +32,13 @@ export class MemoryDatabase {
         return id;
     }
 
+    updateApplication(id: string, application: Application): boolean {
+        if (!this.applications.has(id)) {
+            return false;
+        }
+
+        this.applications.set(id, application);
+        return true;
+    }
+
 }
