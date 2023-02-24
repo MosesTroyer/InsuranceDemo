@@ -1,4 +1,5 @@
 import { Application } from '../models/application';
+import * as crypto from "crypto";
 
 export class MemoryDatabase {
 
@@ -13,8 +14,22 @@ export class MemoryDatabase {
         return this.instance;
     }
 
-    getApplication(applicationId: string): Application | null {
-        return null;
+    private applications: Map<string, Application> = new Map<string, Application>();
+
+    getApplication(applicationId: string): Application | undefined {
+        if (!this.applications.has(applicationId)) {
+            return undefined;
+        }
+
+        return this.applications.get(applicationId);
+    }
+
+    insertApplication(application: Application): string {
+        const id = crypto.randomUUID();
+
+        this.applications.set(id, application);
+
+        return id;
     }
 
 }
