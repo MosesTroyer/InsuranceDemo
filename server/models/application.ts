@@ -10,11 +10,7 @@ export class Application {
     address: Address;
     vehicles: Vehicle[];
 
-    constructor(inputString: string) {
-
-        // TODO test bad input
-        const input = JSON.parse(inputString);
-
+    constructor(input: any) {
         this.firstName = validateString(input, 'firstName');
         this.lastName = validateString(input, 'lastName');
         this.dob = validateDate(input, 'dob');

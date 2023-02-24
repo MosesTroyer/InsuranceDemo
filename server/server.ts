@@ -1,5 +1,5 @@
 import express, {Request, Response} from "express";
-import {getApplication} from "./applications/getApplication";
+import { getApplication, tryInsertApplication } from "./controller/application";
 
 const insuranceDemo = express();
 
@@ -18,6 +18,23 @@ insuranceDemo.get('/api/application/:applicationId', (req: Request, res: Respons
         .send(
             application.toString()
         );
+});
+
+insuranceDemo.post('/api/application', (req: Request, res: Response) => {
+    let applicationId: string;
+
+    try {
+        applicationId = tryInsertApplication(req.body);
+    } catch (e) {
+        console.error(`Unable to insert application: ${ e }`);
+
+        res.status(400).end();
+        return;
+    }
+
+    res
+        .status(200)
+        .end();
 });
 
 export default insuranceDemo;
