@@ -1,4 +1,4 @@
-import { validateNumber, validateString } from '../utilities/inputValidators';
+import { cleanNumber, cleanString } from '../utilities/inputValidators';
 
 export class Vehicle {
 
@@ -12,16 +12,18 @@ export class Vehicle {
             throw new Error('Vehicle input was not provided.');
         }
 
-        this.vin = validateString(input, 'vin');
-        this.make = validateString(input, 'make');
-        this.model = validateString(input, 'model')
+        this.vin = cleanString(input, 'vin');
+        this.make = cleanString(input, 'make');
+        this.model = cleanString(input, 'model')
+        this.year = cleanNumber(input, 'year');
+    }
 
-        const year = validateNumber(input, 'year');
-
-        if (year < 1985 || year > new Date().getFullYear() + 1) {
-            throw new Error('Year is invalid.');
-        }
-
-        this.year = year;
+    validate(): boolean {
+        return !(this.year < 1985
+            || this.year > new Date().getFullYear() + 1
+            || this.vin === ''
+            || this.make === ''
+            || this.model === ''
+        );
     }
 }

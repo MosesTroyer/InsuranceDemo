@@ -1,4 +1,4 @@
-import { validateNumber, validateString } from '../utilities/inputValidators';
+import { cleanNumber, cleanString } from '../utilities/inputValidators';
 
 export class Address {
 
@@ -9,12 +9,21 @@ export class Address {
 
     constructor(input: any) {
         if (!input) {
-            throw new Error('Address input was not provided.');
+            input = {};
         }
 
-        this.street = validateString(input, 'street');
-        this.city = validateString(input, 'city');
-        this.state = validateString(input, 'state');
-        this.zipCode = validateNumber(input, 'zipCode')
+        this.street = cleanString(input, 'street');
+        this.city = cleanString(input, 'city');
+        this.state = cleanString(input, 'state');
+        this.zipCode = cleanNumber(input, 'zipCode')
+    }
+
+    validate(): boolean {
+        return !(
+            this.street === ''
+            || this.city === ''
+            || this.state === ''
+            || this.zipCode === 0
+        );
     }
 }

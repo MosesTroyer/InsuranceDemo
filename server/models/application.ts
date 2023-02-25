@@ -1,4 +1,4 @@
-import { validateDate, validateString } from '../utilities/inputValidators';
+import { cleanDate, cleanString } from '../utilities/inputValidators';
 import { Address } from './address';
 import { Vehicle } from './vehicle';
 
@@ -11,20 +11,38 @@ export class Application {
     vehicles: Vehicle[];
 
     constructor(input: any) {
-        this.firstName = validateString(input, 'firstName');
-        this.lastName = validateString(input, 'lastName');
-        this.dob = validateDate(input, 'dob');
+        this.firstName = cleanString(input, 'firstName');
+        this.lastName = cleanString(input, 'lastName');
+        this.dob = cleanDate(input, 'dob');
         this.address = new Address(input.address);
 
-        const vehicles = input['vehicles'];
+        let vehicles = input['vehicles'];
         if (!Array.isArray(vehicles)) {
-            throw new Error('Unable to parse provided vehicles.');
-        }
-        if (vehicles.length > 3 || vehicles.length === 0) {
-            throw new Error('Incorrect amount of vehicles');
+            vehicles = [];
         }
 
-        this.vehicles = vehicles.map(v => new Vehicle(v));
+        this.vehicles = vehicles.map((v: any) => new Vehicle(v));
+    }
+
+    validate(): boolean {
+        if (this.firstName === ''
+            || this.lastName === ''
+            || (new Date().getFullYear() - this.dob.getFullYear()) < 16
+        ) {
+            return false;
+        }
+
+        if (this.vehicles.length > 3 || this.vehicles.length === 0) {
+            return false;
+        }
+
+        for (let i = 0; i < this.vehicles.length; i++) {
+            if (!this.vehicles[i].validate()) {
+                return false;
+            }
+        }
+
+        return this.address.validate();
     }
 
     // JSON string with fields that are safe to send to front-end

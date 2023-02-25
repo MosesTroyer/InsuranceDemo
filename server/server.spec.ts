@@ -50,17 +50,6 @@ describe('API Tests', () => {
     });
 
     describe('Post Application', () => {
-        it('Should return 400 for bad data', async () => {
-           await request(insuranceDemo)
-               .post(`/api/application`)
-               .send(JSON.stringify({
-                   empty: 'emptyData'
-               }))
-               .then((res: any) => {
-                   expect(res.statusCode).toBe(400);
-               });
-        });
-
         //TODO refactor to check id
         it('Should return id for new application', async () => {
             await request(insuranceDemo)
@@ -90,18 +79,7 @@ describe('API Tests', () => {
         });
     });
 
-    describe('Post Application', () => {
-        it('Should return 400 for bad data', async () => {
-            await request(insuranceDemo)
-                .put(`/api/application/abc123`)
-                .send(JSON.stringify({
-                    empty: 'emptyData'
-                }))
-                .then((res: any) => {
-                    expect(res.statusCode).toBe(400);
-                });
-        });
-
+    describe('PUT Application', () => {
         it('Should return 404 on non existent id', async () => {
             await request(insuranceDemo)
                 .put(`/api/application/ABC123`)
@@ -182,42 +160,65 @@ describe('API Tests', () => {
     });
 
     describe('Post Application', () => {
-        it('Should return 400 for bad data', async () => {
-            await request(insuranceDemo)
-                .post(`/api/application`)
-                .send(JSON.stringify({
-                    empty: 'emptyData'
-                }))
-                .then((res: any) => {
-                    expect(res.statusCode).toBe(400);
-                });
-        });
+        it('Should return price for valid application', async () => {
 
-        it('Should return price for new application', async () => {
+            const application = {
+                firstName: 'Joseph',
+                lastName: 'Joestar',
+                dob: '1920-09-27T05:00:00.000Z',
+                address: {
+                    street: '558 Broadway',
+                    city: 'New York',
+                    state: 'New York',
+                    zipCode: 10012,
+                },
+                vehicles: [
+                    {
+                        vin: 'ABC123',
+                        make: 'Honda',
+                        model: 'Civic',
+                        year: 2017,
+                    }
+                ],
+            };
+
+            const id = MemoryDatabase.GetInstance().insertApplication(new Application(application));
+
             await request(insuranceDemo)
-                .post(`/api/application`)
-                .send({
-                    firstName: 'Joseph',
-                    lastName: 'Joestar',
-                    dob: '1920-09-27T05:00:00.000Z',
-                    address: {
-                        street: '558 Broadway',
-                        city: 'New York',
-                        state: 'New York',
-                        zipCode: 10012,
-                    },
-                    vehicles: [
-                        {
-                            vin: 'ABC123',
-                            make: 'Honda',
-                            model: 'Civic',
-                            year: 2017,
-                        }
-                    ],
-                })
+                .post(`/api/application/${ id }/validate`)
                 .then((res: any) => {
                     expect(res.statusCode).toBe(200);
                     expect(typeof JSON.parse(res.text).price).toBe('number');
+                });
+        });
+
+        it('Should return 400 for invalid application', async () => {
+
+            const application = {
+                firstName: 'Joseph',
+                dob: '1920-09-27T05:00:00.000Z',
+                address: {
+                    street: '558 Broadway',
+                    city: 'New York',
+                    state: 'New York',
+                    zipCode: 10012,
+                },
+                vehicles: [
+                    {
+                        vin: 'ABC123',
+                        make: 'Honda',
+                        model: 'Civic',
+                        year: 2017,
+                    }
+                ],
+            };
+
+            const id = MemoryDatabase.GetInstance().insertApplication(new Application(application));
+
+            await request(insuranceDemo)
+                .post(`/api/application/${ id }/validate`)
+                .then((res: any) => {
+                    expect(res.statusCode).toBe(400);
                 });
         });
     });

@@ -6,56 +6,60 @@ describe('Vehicle', () => {
         expect(() => { new Vehicle(null) }).toThrowError(`Vehicle input was not provided.`);
     });
 
-    it('Should throw on bad vin', () => {
-        expect(() => { new Vehicle({
-                vin: 123
-            })
-        }).toThrowError(`Unable to validate vin`);
+    it('Should default on bad input', () => {
+        const vehicle = new Vehicle({
+            vin: 123,
+            make: 123,
+            model: 123,
+            year: 'Two Thousand Seventeen'
+        });
+        expect(vehicle.vin).toBe('');
+        expect(vehicle.make).toBe('');
+        expect(vehicle.model).toBe('');
+        expect(vehicle.year).toBe(0);
     });
 
-    it('Should throw on bad make', () => {
-        expect(() => { new Vehicle({
-                vin: 'ABC123',
-                make: 123,
-            })
-        }).toThrowError(`Unable to validate make`);
+    it('Should validate incorrect input', () => {
+        expect(new Vehicle({
+            vin: 'ABC123',
+            make: 'Honda',
+            model: 'Civic',
+            year: 1940
+        }).validate()).toBeFalsy();
+
+        expect(new Vehicle({
+            vin: 'ABC123',
+            make: 'Honda',
+            model: 'Civic',
+            year: 40000
+        }).validate()).toBeFalsy();
+
+        expect(new Vehicle({
+            make: 'Honda',
+            model: 'Civic',
+            year: 1990
+        }).validate()).toBeFalsy();
+
+        expect(new Vehicle({
+            vin: 'ABC123',
+            model: 'Civic',
+            year: 1990
+        }).validate()).toBeFalsy();
+
+        expect(new Vehicle({
+            vin: 'ABC123',
+            make: 'Honda',
+            year: 1990
+        }).validate()).toBeFalsy();
     });
 
-    it('Should throw on bad model', () => {
-        expect(() => { new Vehicle({
-                vin: 'ABC123',
-                make: 'Honda',
-                model: 123,
-            })
-        }).toThrowError(`Unable to validate model`);
-    });
-
-    it('Should throw on bad year', () => {
-        expect(() => { new Vehicle({
-                vin: 'ABC123',
-                make: 'Honda',
-                model: 'Civic',
-                year: 'Two Thousand Seventeen'
-            })
-        }).toThrowError(`Unable to validate year`);
-    });
-
-    it('Should throw on years before 1985 and after the current year', () => {
-        expect(() => { new Vehicle({
-                vin: 'ABC123',
-                make: 'Honda',
-                model: 'Civic',
-                year: 1940
-            })
-        }).toThrowError(`Year is invalid.`);
-
-        expect(() => { new Vehicle({
-                vin: 'ABC123',
-                make: 'Honda',
-                model: 'Civic',
-                year: 40000
-            })
-        }).toThrowError(`Year is invalid.`);
+    it('Should validate correct input', () => {
+        expect(new Vehicle({
+            vin: 'ABC123',
+            make: 'Honda',
+            model: 'Civic',
+            year: 1990,
+        }).validate()).toBeTruthy();
     });
 
     it('Should return clean vehicle', () => {

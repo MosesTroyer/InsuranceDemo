@@ -21,17 +21,8 @@ insuranceDemo.get('/api/application/:applicationId', (req: Request, res: Respons
 });
 
 // TODO: Misunderstood this. Does not start an application, but opens up our site with provided info
-insuranceDemo.post('/api/application/new', (req: Request, res: Response) => {
-    let applicationId: string;
-
-    try {
-        applicationId = tryInsertApplication(req.body);
-    } catch (e) {
-        console.error(`Unable to insert application: ${ e }`);
-
-        res.status(400).end();
-        return;
-    }
+insuranceDemo.post('/api/application', (req: Request, res: Response) => {
+    let applicationId = tryInsertApplication(req.body);
 
     res
         .status(200)
@@ -39,16 +30,7 @@ insuranceDemo.post('/api/application/new', (req: Request, res: Response) => {
 });
 
 insuranceDemo.put('/api/application/:applicationId', (req: Request, res: Response) => {
-    let result: boolean;
-
-    try {
-        result = tryUpdateApplication(req.params.applicationId, req.body);
-    } catch (e) {
-        console.error(`Unable to update application: ${ e }`);
-
-        res.status(400).end();
-        return;
-    }
+    let result = tryUpdateApplication(req.params.applicationId, req.body);
 
     if (!result) {
         res
@@ -62,14 +44,10 @@ insuranceDemo.put('/api/application/:applicationId', (req: Request, res: Respons
         .end();
 });
 
-insuranceDemo.post('/api/application', (req: Request, res: Response) => {
-    let applicationId: string;
+insuranceDemo.post('/api/application/:applicationId/validate', (req: Request, res: Response) => {
+    const result = getApplication(req.params.applicationId)?.validate();
 
-    try {
-        applicationId = tryInsertApplication(req.body);
-    } catch (e) {
-        console.error(`Unable to insert application: ${ e }`);
-
+    if (!result) {
         res.status(400).end();
         return;
     }
