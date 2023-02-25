@@ -20,13 +20,14 @@ insuranceDemo.get('/api/application/:applicationId', (req: Request, res: Respons
         );
 });
 
-// TODO: Misunderstood this. Does not start an application, but opens up our site with provided info
 insuranceDemo.post('/api/application', (req: Request, res: Response) => {
     let applicationId = tryInsertApplication(req.body);
 
     res
         .status(200)
-        .end();
+        .send(JSON.stringify({
+            redirect: `http://localhost:3000/application/${ applicationId }`,
+        }));
 });
 
 insuranceDemo.put('/api/application/:applicationId', (req: Request, res: Response) => {

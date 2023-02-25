@@ -5,8 +5,11 @@ import {AddressForm} from "./AddressForm";
 import {Address} from "../models/address";
 import {Vehicle} from "../models/vehicle";
 import {VehicleContainer} from "./VehicleContainer";
+import { Subject, Subscription, debounce, interval } from 'rxjs';
+import axios from 'axios';
 
 interface IApplicationForm {
+
 }
 
 interface ApplicationFormState {
@@ -15,14 +18,24 @@ interface ApplicationFormState {
     dob: string;
     address: Address;
     vehicles: Vehicle[];
+
+    loading: boolean;
+    id: string;
 }
 
 export class ApplicationForm extends React.Component<IApplicationForm, ApplicationFormState> {
+
+    // TODO send data to backend with a debounce
+    private onChange: Subject<void> = new Subject();
+    private applicationUpdater: Subscription | undefined;
 
     constructor(props: IApplicationForm) {
         super(props);
 
         this.state = {
+            id: window.location.href.split('/')[4],
+            loading: true,
+
             firstName: '',
             lastName: '',
             dob: '',
@@ -30,17 +43,58 @@ export class ApplicationForm extends React.Component<IApplicationForm, Applicati
             vehicles: [
                 new Vehicle()
             ],
+        };
+    }
+
+    componentDidMount() {
+        axios.get(`/api/application/${ this.state.id }`)
+            .then((result) => {
+                this.setState({
+                    address: result.data.address,
+                    dob: result.data.dob,
+                    firstName: result.data.firstName,
+                    lastName: result.data.lastName,
+                    vehicles: result.data.vehicles,
+                    loading: false,
+                })
+            });
+
+        this.applicationUpdater = this.onChange
+            .pipe(
+                debounce(_ => interval(5000))
+            )
+            .subscribe(_ => {
+                axios.put(`/api/application/${ this.state.id }`, {
+                    firstName: this.state.firstName,
+                    lastName: this.state.lastName,
+                    dob: this.state.dob,
+                    address: this.state.address,
+                    vehicles: this.state.vehicles,
+                })
+                    .then((response) => {
+                        console.debug('Updated data.')
+                    });
+            });
+    }
+
+    componentWillUnmount() {
+        if (this.applicationUpdater) {
+            this.applicationUpdater.unsubscribe();
         }
     }
 
     render() {
-        return (
-            <div className="applicationForm">
+        let content = <div>Loading data...</div>;
 
+        if (!this.state.loading) {
+            content = <div>
                 <ValidatedTextField
                     label={'First Name'}
                     value={ this.state.firstName }
-                    onChange={ (v) => this.setState({ firstName: v }) }
+                    onChange={ (v) => {
+                        this.setState({ firstName: v });
+                        this.onChange.next();
+                    } }
                 />
 
                 <br />
@@ -48,31 +102,47 @@ export class ApplicationForm extends React.Component<IApplicationForm, Applicati
                 <ValidatedTextField
                     label={'Last Name'}
                     value={ this.state.lastName }
-                    onChange={ (v) => this.setState({ lastName: v }) }
+                    onChange={ (v) => {
+                        this.setState({ lastName: v });
+                        this.onChange.next();
+                    } }
                 />
 
                 <br />
 
                 <ValidatedAgeField
                     value={ this.state.dob }
-                    onChange={ (v) => this.setState({ dob: v }) }
+                    onChange={ (v) => {
+                        this.setState({ dob: v });
+                        this.onChange.next();
+                    } }
                 />
 
                 <br />
 
                 <AddressForm
                     address={ this.state.address }
-                    onChange={ (address: Address) => this.setState({ address }) } />
+                    onChange={ (address: Address) => {
+                        this.setState({ address });
+                        this.onChange.next();
+                    } } />
 
                 <br />
 
                 <VehicleContainer
                     vehicles={ this.state.vehicles }
                     onChange={ (vehicles: Vehicle[]) => {
-                        this.setState({ vehicles })
+                        this.setState({ vehicles });
+                        this.onChange.next();
                     } }
                 />
+            </div>;
+        }
 
+        return (
+            <div className="applicationForm">
+
+                { content }
 
             </div>
         );
