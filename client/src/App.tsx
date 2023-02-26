@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
 import { ApplicationForm } from './components/ApplicationForm';
-import {ExternalSite} from "./components/ExternalSite";
+import { ExternalSite } from './components/ExternalSite';
 
 function App() {
     return (
@@ -15,7 +15,6 @@ function App() {
                     </Route>
                 </Routes>
             </BrowserRouter>
-
         </div>
     );
 }

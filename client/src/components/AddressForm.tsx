@@ -1,7 +1,7 @@
 import React from 'react';
-import {ValidatedTextField} from "./ValidatedTextField";
-import {Address} from "../models/address";
-import {ValidatedNumberField} from "./ValidatedNumberField";
+import { ValidatedTextField } from './ValidatedTextField';
+import { Address } from '../models/address';
+import { ValidatedNumberField } from './ValidatedNumberField';
 
 interface IAddressForm {
     address: Address;

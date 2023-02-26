@@ -19,10 +19,6 @@ export class VehicleContainer extends React.Component<IVehicleContainer, Vehicle
     constructor(props: IVehicleContainer) {
         super(props);
 
-        this.state = {
-
-        }
-
         this.handleChange = this.handleChange.bind(this);
     }
 

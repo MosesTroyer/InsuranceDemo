@@ -7,6 +7,7 @@ interface IValidatedNumberField {
 }
 
 interface ValidatedNumberFieldState {
+
 }
 
 export class ValidatedNumberField extends React.Component<IValidatedNumberField, ValidatedNumberFieldState> {

@@ -1,6 +1,6 @@
 import React from 'react';
-import {Address} from "../models/address";
-import {Vehicle} from "../models/vehicle";
+import { Address } from '../models/address';
+import { Vehicle } from '../models/vehicle';
 import axios from 'axios';
 
 interface IApplicationFormSubmission {
@@ -26,10 +26,6 @@ export class ApplicationFormSubmission extends React.Component<IApplicationFormS
             error: false,
             price: 0,
         }
-
-    }
-
-    displayPriceQuote(): void {
 
     }
 

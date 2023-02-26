@@ -1,5 +1,5 @@
 import 'jest';
-import {cleanDate, cleanNumber, cleanString} from "./inputValidators";
+import { cleanDate, cleanNumber, cleanString } from './inputValidators';
 
 describe('InputValidators', () => {
 

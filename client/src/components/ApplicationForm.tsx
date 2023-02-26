@@ -1,13 +1,13 @@
 import React from 'react';
-import {ValidatedTextField} from "./ValidatedTextField";
-import {ValidatedAgeField} from "./ValidatedAgeField";
-import {AddressForm} from "./AddressForm";
-import {Address} from "../models/address";
-import {Vehicle} from "../models/vehicle";
-import {VehicleContainer} from "./VehicleContainer";
+import { ValidatedTextField } from './ValidatedTextField';
+import { ValidatedAgeField } from './ValidatedAgeField';
+import { AddressForm } from './AddressForm';
+import { Address } from '../models/address';
+import { Vehicle } from '../models/vehicle';
+import { VehicleContainer } from './VehicleContainer';
 import { Subject, Subscription, debounce, interval } from 'rxjs';
 import axios from 'axios';
-import {ApplicationFormSubmission} from "./ApplicationFormSubmission";
+import { ApplicationFormSubmission } from './ApplicationFormSubmission';
 import './ApplicationForm.css';
 
 interface IApplicationForm {
@@ -72,7 +72,7 @@ export class ApplicationForm extends React.Component<IApplicationForm, Applicati
                     address: this.state.address,
                     vehicles: this.state.vehicles,
                 })
-                    .then((response) => {
+                    .then((_) => {
                         console.debug('Updated data.')
                     });
             });
@@ -147,9 +147,6 @@ export class ApplicationForm extends React.Component<IApplicationForm, Applicati
                         <br />
                     </div>
                 </div>
-
-
-
 
                 <ApplicationFormSubmission
                     firstName={ this.state.firstName }

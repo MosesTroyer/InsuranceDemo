@@ -1,7 +1,7 @@
 import 'jest';
 import insuranceDemo from './server';
-import {MemoryDatabase} from "./db/memoryDatabase";
-import {Application} from "./models/application";
+import { MemoryDatabase } from './db/memoryDatabase';
+import { Application } from './models/application';
 
 const request = require('supertest');
 
@@ -50,7 +50,6 @@ describe('API Tests', () => {
     });
 
     describe('Post Application', () => {
-        //TODO refactor to check id
         it('Should return id for new application', async () => {
             await request(insuranceDemo)
                 .post(`/api/application`)
@@ -75,6 +74,7 @@ describe('API Tests', () => {
                 })
                 .then((res: any) => {
                     expect(res.statusCode).toBe(200);
+                    expect(typeof JSON.parse(res.text).redirect).toBe('string')
                 });
         });
     });
@@ -186,6 +186,7 @@ describe('API Tests', () => {
 
             await request(insuranceDemo)
                 .post(`/api/application/${ id }/validate`)
+                .send(application)
                 .then((res: any) => {
                     expect(res.statusCode).toBe(200);
                     expect(typeof JSON.parse(res.text).price).toBe('number');

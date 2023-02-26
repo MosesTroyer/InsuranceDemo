@@ -1,5 +1,5 @@
-import express, {Request, Response} from "express";
-import {getApplication, tryInsertApplication, tryUpdateApplication} from "./controller/application";
+import express, { Request, Response } from 'express';
+import { getApplication, tryInsertApplication, tryUpdateApplication } from './controller/application';
 
 const insuranceDemo = express();
 
