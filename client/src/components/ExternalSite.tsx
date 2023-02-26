@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import './ExternalSite.css';
 
 interface IExternalSite {
 }
@@ -27,20 +28,23 @@ export class ExternalSite extends React.Component<IExternalSite, ExternalSiteSta
 
     render() {
         return (
-            <div>
-                This is an "external site" that will call POST /api/application with the given info:
+            <div className='externalSite'>
+                <div className='externalSiteInteractivity'>
+                    This is an "external site" that will call POST /api/application with the given info:
 
-                <p>
-                    First Name: 'Joseph' <br />
-                    Last Name: 'Joestar' <br />
-                    Date of Birth: '9/27/1920' <br />
-                </p>
+                    <p>
+                        First Name: 'Joseph' <br />
+                        Last Name: 'Joestar' <br />
+                        Date of Birth: '9/27/1920' <br />
+                    </p>
 
-                <br />
+                    <br />
 
-                <button onClick={ this.redirect }>
-                    Finish Application
-                </button>
+                    <button onClick={ this.redirect }>
+                        Finish Application
+                    </button>
+                </div>
+
             </div>
         );
     }

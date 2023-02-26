@@ -30,7 +30,11 @@ export class AddressForm extends React.Component<IAddressForm, AddressFormState>
 
     render() {
         return (
-            <div className="addressForm">
+            <div className="form">
+
+                <div className='formTitle'>
+                    Address
+                </div>
 
                 <ValidatedTextField
                     label={'Street Address'}

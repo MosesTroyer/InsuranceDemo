@@ -1,0 +1,31 @@
+.applicationForm {
+    padding-left: 30vw;
+    padding-top: 10vh;
+}
+
+.form {
+    border: 2px solid black;
+    border-radius: 12px;
+    padding: 12px;
+    width: fit-content;
+    margin-top: 6px;
+    margin-bottom: 6px;
+}
+
+.formTitle {
+    background-color: white;
+    position: relative;
+    top: -28px;
+    width: fit-content;
+    padding: 5px 10px 5px 10px;
+}
+
+.applicationStructure {
+    display: flex;
+    flex-direction: row;
+}
+
+.vehicleContainer {
+    width: 20vw;
+    padding-left: 16px;
+}

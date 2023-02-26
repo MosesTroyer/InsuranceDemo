@@ -33,7 +33,7 @@ export class VehicleForm extends React.Component<IVehicleForm, VehicleFormState>
 
     render() {
         return (
-            <div>
+            <div className='form'>
                 <button onClick={ this.props.onDelete }>
                     Remove Vehicle
                 </button>
