@@ -31,7 +31,7 @@ insuranceDemo.post('/api/application', (req: Request, res: Response) => {
 });
 
 insuranceDemo.put('/api/application/:applicationId', (req: Request, res: Response) => {
-    let result = tryUpdateApplication(req.params.applicationId, req.body);
+    const result = tryUpdateApplication(req.params.applicationId, req.body);
 
     if (!result) {
         res
@@ -46,9 +46,18 @@ insuranceDemo.put('/api/application/:applicationId', (req: Request, res: Respons
 });
 
 insuranceDemo.post('/api/application/:applicationId/validate', (req: Request, res: Response) => {
-    const result = getApplication(req.params.applicationId)?.validate();
+    const result = tryUpdateApplication(req.params.applicationId, req.body);
 
     if (!result) {
+        res
+            .status(404)
+            .end();
+        return;
+    }
+
+    const validationResult = getApplication(req.params.applicationId)?.validate();
+
+    if (!validationResult) {
         res.status(400).end();
         return;
     }

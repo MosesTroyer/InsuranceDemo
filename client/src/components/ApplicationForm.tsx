@@ -7,6 +7,7 @@ import {Vehicle} from "../models/vehicle";
 import {VehicleContainer} from "./VehicleContainer";
 import { Subject, Subscription, debounce, interval } from 'rxjs';
 import axios from 'axios';
+import {ApplicationFormSubmission} from "./ApplicationFormSubmission";
 
 interface IApplicationForm {
 
@@ -136,6 +137,16 @@ export class ApplicationForm extends React.Component<IApplicationForm, Applicati
                         this.onChange.next();
                     } }
                 />
+
+                <br />
+
+                <ApplicationFormSubmission
+                    firstName={ this.state.firstName }
+                    lastName={ this.state.lastName }
+                    dob={ this.state.dob }
+                    address={ this.state.address }
+                    vehicles={ this.state.vehicles }
+                    id={ this.state.id } />
             </div>;
         }
 
